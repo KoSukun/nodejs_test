@@ -1,0 +1,25 @@
+{
+  "name": "jstest",
+  "version": "1.0.0",
+  "description": "js test project utilizing node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KoSukun/nodejs_test.git"
+  },
+  "keywords": [
+    "node.js"
+  ],
+  "author": "Sukun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KoSukun/nodejs_test/issues"
+  },
+  "homepage": "https://github.com/KoSukun/nodejs_test#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
