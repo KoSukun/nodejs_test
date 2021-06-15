@@ -1,25 +1,42 @@
-
-
-
 // Param으로 Array (DataTableColumn의 Columns은 Array로 관리되므로), List<Object> 들어가면 해당 List에 Label, Value담은 뒤 반환
 function addFieldValueWrapList(dataColumns, virtualObjectList){
     // init시 담아서 핸들링
     virtualObjectList.forEach(virtualObj => {
         let fieldValueMapList = [];
         dataColumns.forEach(column => {
-            fieldValueMapObj = {
-                fieldName : column.apiName,
-                fieldValue : virtualObj[column.apiName],
-                label : column.label,
-                type : column.datatype,
-                validType : column.validType
+            let fieldValueMapObj = {
+                fieldName: column.fieldName,
+                fieldValue: virtualObj[column.fieldName],
+                label: column.label,
+                type: column.type,
+                validType: column.validType
             };
-            fieldValueMapList.add(fieldValueMapObj);
+            fieldValueMapList.push(fieldValueMapObj);
         });
         virtualObj['fieldValueWrapList'] = fieldValueMapList;
     });
     return virtualObjectList;
 }
+
+// // Param으로 Array (DataTableColumn의 Columns은 Array로 관리되므로), List<Object> 들어가면 해당 List에 Label, Value담은 뒤 반환
+// function addFieldValueWrapList(dataColumns, virtualObjectList){
+//     // init시 담아서 핸들링
+//     virtualObjectList.forEach(virtualObj => {
+//         let fieldValueMapList = [];
+//         dataColumns.forEach(column => {
+//             fieldValueMapObj = {
+//                 fieldName: column.fieldName,
+//                 fieldValue: virtualObj[column.fieldName],
+//                 label: column.label,
+//                 type: column.type,
+//                 validType: column.validType
+//             };
+//             fieldValueMapList.add(fieldValueMapObj);
+//         });
+//         virtualObj['fieldValueWrapList'] = fieldValueMapList;
+//     });
+//     return virtualObjectList;
+// }
 
 function generateVehicleGroup(){
     /*===============================================
