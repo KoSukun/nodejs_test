@@ -1,3 +1,83 @@
+const fireA = () => {
+    let param = [ 'A & B & 1' , 'C & D & 2 & !!' , 'E & F' ];
+    aFunction(param);
+}
+const aFunction = ( param = [] ) => {
+    param.forEach( entry => {
+        const [ key , val , detail ] = entry.split('&');
+        console.log( key , ' > ', val , ' > ' , detail );  
+    })
+}
+
+// fireA();
+// const fireB = () => {
+//     // const param = [{key:'A',value:'aaa',child:{c1:'cccc',c2:'dddd'}}];
+//     const paramArray = [{ 'feature' : {} , 'feature'}, {}]
+
+//     const returnValue = generateQuotationVO();
+//     console.log(returnValue);
+// }
+// const generateQuotationVO = ( param = [] ) => {
+//     return [{'key' : a, 'value': b, 'child': {'c1':c1,'c2':c2}}] = param.map( entry => {
+//         return {'key':entry.key , 'value':entry.value, 'child':entry.child};
+//     });
+// }
+// fireB();
+
+const testGenerate = () => {
+    const paramArray = [
+        {'feature': {'fscCode' : 14120412, 'garbage': 12412412, 'description':'Exterior'}, 'trim': {'fsc': 123541, 'garbage2': 12414124, 'garbage124': 12412}, 'option': {'modelYear' : 1241, 'garbage1412': 1251, 'code': 1241, 'description':'test'} },
+        {'feature': {'fscCode' : 1241212, 'garbage': 12412412, 'description':'Interior'}, 'trim': {'fsc': 124112, 'garbage2': 12414124, 'garbage124': 12412}, 'option': {'modelYear' : 1512, 'garbage1412': 1251, 'code': 1244, 'description':'test222'} }
+    ]
+    constrainGenerate(paramArray);
+    // console.log(returnValue);
+}
+
+const constrainGenerate = (param = []) => {
+    // key: VehicleQuotationVO property variable name / value: finally referencing property variable name of VO
+    const keyMap = [{key:'fsc',value:'fscCode'},
+    {key:'modelYear',value:'modelYear'},
+    {key:'exteriorColorCode',value:'code'},{key:'exteriorColorDescription',value:'description'},
+    {key:'interiorColorCode',value:'code'},{key:'interiorColorDescription',value:'description'},
+    {key:'totalAmount', value:'undetermined'},
+    {key:'conditions', value:'undetermined'}];
+
+    // total amount - 실시간 반영 - 최초 선택시 listPrice로?
+    // 선택되어있는 번들에 대해서 수정 시에는 price + condition조합 참조하여 반영?
+    const keysToBeParsedInFeature = ['exterior', 'interior'];
+    let returnGeneratedArray = [];
+
+    param.forEach(paramElement => {
+        let keyValueGeneratedObject = {};
+        keyMap.forEach(entry => {
+            // key.entry = key.value에 해당하는 값 추출해서 매핑
+            keyValueGeneratedObject[entry.key] = paramElement['option'][entry.value] != null ? (paramElement['option'][entry.value]) :
+             (paramElement['feature'][entry.value] != null) ? paramElement['feature'][entry.value] :
+             paramElement['trim'][entry.value];
+             if(keyValueGeneratedObject[entry.key] == null) {
+                 keysToBeParsedInFeature.forEach(keyFlag => {
+                     if(entry.key.includes(keyFlag) && paramElement['feature']['description'].includes(keyFlag)) {
+                         keyValueGeneratedObject[entry.key] = paramElement['option'][entry.value];
+                     }
+                 });
+             }
+             // keyElement의 가격정보 및 List Condition 계산 로직 호출
+        })
+        returnGeneratedArray.push(keyValueGeneratedObject);
+    })
+
+    console.log(returnGeneratedArray);
+
+    return returnGeneratedArray;
+}
+
+const calculateAmountWithConditions = (param = []) => {
+    
+}
+
+testGenerate();
+
+
 // Param으로 Array (DataTableColumn의 Columns은 Array로 관리되므로), List<Object> 들어가면 해당 List에 Label, Value담은 뒤 반환
 function addFieldValueWrapList(dataColumns, virtualObjectList){
     // init시 담아서 핸들링
