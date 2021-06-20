@@ -1,29 +1,3 @@
-const fireA = () => {
-    let param = [ 'A & B & 1' , 'C & D & 2 & !!' , 'E & F' ];
-    aFunction(param);
-}
-const aFunction = ( param = [] ) => {
-    param.forEach( entry => {
-        const [ key , val , detail ] = entry.split('&');
-        console.log( key , ' > ', val , ' > ' , detail );  
-    })
-}
-
-// fireA();
-// const fireB = () => {
-//     // const param = [{key:'A',value:'aaa',child:{c1:'cccc',c2:'dddd'}}];
-//     const paramArray = [{ 'feature' : {} , 'feature'}, {}]
-
-//     const returnValue = generateQuotationVO();
-//     console.log(returnValue);
-// }
-// const generateQuotationVO = ( param = [] ) => {
-//     return [{'key' : a, 'value': b, 'child': {'c1':c1,'c2':c2}}] = param.map( entry => {
-//         return {'key':entry.key , 'value':entry.value, 'child':entry.child};
-//     });
-// }
-// fireB();
-
 const testGenerate = () => {
     const paramArray = [
         {'feature': {'fscCode' : 14120412, 'garbage': 12412412, 'description':'Exterior'}, 'trim': {'fsc': 123541, 'garbage2': 12414124, 'garbage124': 12412}, 'option': {'modelYear' : 1241, 'garbage1412': 1251, 'code': 1241, 'description':'test'} },
@@ -72,10 +46,36 @@ const constrainGenerate = (param = []) => {
 }
 
 const calculateAmountWithConditions = (param = []) => {
-    
+
 }
 
 testGenerate();
+
+// const fireA = () => {
+//     let param = [ 'A & B & 1' , 'C & D & 2 & !!' , 'E & F' ];
+//     aFunction(param);
+// }
+// const aFunction = ( param = [] ) => {
+//     param.forEach( entry => {
+//         const [ key , val , detail ] = entry.split('&');
+//         console.log( key , ' > ', val , ' > ' , detail );  
+//     })
+// }
+
+// fireA();
+// const fireB = () => {
+//     // const param = [{key:'A',value:'aaa',child:{c1:'cccc',c2:'dddd'}}];
+//     const paramArray = [{ 'feature' : {} , 'feature'}, {}]
+
+//     const returnValue = generateQuotationVO();
+//     console.log(returnValue);
+// }
+// const generateQuotationVO = ( param = [] ) => {
+//     return [{'key' : a, 'value': b, 'child': {'c1':c1,'c2':c2}}] = param.map( entry => {
+//         return {'key':entry.key , 'value':entry.value, 'child':entry.child};
+//     });
+// }
+// fireB();
 
 
 // Param으로 Array (DataTableColumn의 Columns은 Array로 관리되므로), List<Object> 들어가면 해당 List에 Label, Value담은 뒤 반환
