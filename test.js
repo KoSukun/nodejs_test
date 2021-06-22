@@ -1,3 +1,83 @@
+// a = {'test': 1, 'test2':3};
+// console.log(a['test']);
+// console.log(a.test2);
+// a['test2'] = 2
+// console.log(a.test2);
+
+
+const testFormattedTrims = () => {
+    const selectedTrims = [
+        {
+            'fsc' : '12124G124KCV',
+            'description' : 'Kona EV',
+            'features' : [{
+                'category': 'Exterior Color',
+                'options': [
+                    {
+                        'description': 'Exterior Color Code',
+                        'code':'OPT102',
+                        'checked':true,
+                        'dmsProductId':'a1214121512145ke'
+                    }
+                ]
+            }]
+        }]
+        console.log(generateQuotationVO(selectedTrims));
+    // console.log(returnValue);
+}
+
+// 각 index가 정의되어 있으므로 interior color에 해당
+
+const generateQuotationVO = (param = []) => {
+    let quotationVOList = [];
+
+    param.forEach(trim => {
+        let quotationVO = { 'fsc' : trim.fscCode, 'description' : trim.description };
+
+        trim.features.forEach(feature => {
+            feature.options.forEach(option => {
+                let conditions = [];
+                if(option.checked === true) {
+                    let condition = {};
+                    // Switch-Case with LABEL
+                    switch (feature.category) {
+                        case 'Exterior Color':      // PickList의 API로 참조
+                            quotationVO['exteriorColorCode'] = option.code;
+                            quotationVO['exteriorColorDescription'] = option.description;
+                            break;
+                        case 'Interior Color':
+                            quotationVO['interiorColorCode'] = option.code;
+                            quotationVO['interiorColorDescription'] = option.description;
+                            break;
+                        default:
+                            condition['type'] = feature.category; // or etc에 대한 상세 category 필요 가능성 존재
+                            condition['description'] = option.description;
+                            condition['amount'] = option.listPrice;
+                            conditions.push(condition);
+                            break;
+                      };
+                    // case Exterior Color Code
+                    // case Interior Color Code
+                    // case Options
+                    // case Etc
+                    // ...
+
+                    // 할인 등 적용 내역 일괄 적용 하는 부분 -> 따로 메서드로 구현하여 뺀 상태로, 다른곳에서도 해당 메서드로 호출 -> 초기일 경우와 config에서넘어온 경우분리하여 파악
+                    // 가격 계산 시 quantity 등에 관한 고려도 필요
+
+                    // true가 아닐 경우 추가되지 않음
+                    quotationVOList.push(quotationVO);
+                }
+            });
+        });
+    });
+
+    return quotationVOList;
+}
+
+testFormattedTrims();
+
+
 const testGenerate = () => {
     const paramArray = [
         {'feature': {'fscCode' : 14120412, 'garbage': 12412412, 'description':'Exterior'}, 'trim': {'fsc': 123541, 'garbage2': 12414124, 'garbage124': 12412}, 'option': {'modelYear' : 1241, 'garbage1412': 1251, 'code': 1241, 'description':'test'} },
@@ -6,6 +86,8 @@ const testGenerate = () => {
     constrainGenerate(paramArray);
     // console.log(returnValue);
 }
+
+// 각 index가 정의되어 있으므로 interior color에 해당
 
 const constrainGenerate = (param = []) => {
     // key: VehicleQuotationVO property variable name / value: finally referencing property variable name of VO
@@ -49,7 +131,7 @@ const calculateAmountWithConditions = (param = []) => {
 
 }
 
-testGenerate();
+// testGenerate();
 
 // const fireA = () => {
 //     let param = [ 'A & B & 1' , 'C & D & 2 & !!' , 'E & F' ];
