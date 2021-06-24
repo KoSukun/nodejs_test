@@ -45,7 +45,58 @@ function addFieldValueWrapList(dataColumns, virtualObjectList){
 // }
 
 
+// Quote bundle creation prototypes
 
+// 각 index가 정의되어 있으므로 interior color에 해당
+
+const generateQuotationVO = (param = []) => {
+    let quotationVOList = [];
+    let isQuotationVO;
+
+    param.forEach(trim => {
+        let quotationVO = { 'fsc' : trim.fscCode, 'modelYear': trim.modelYear, 'description' : trim.description };
+
+        trim.features.forEach(feature => {
+            feature.options.forEach(option => {
+                let conditions = [];
+                if(option.checked === true) {
+                    let condition = {};
+                    // Switch-Case with LABEL
+                    switch (feature.category) {
+                        case 'Exterior Color':      // PickList의 API로 참조
+                            quotationVO['exteriorColorCode'] = option.code;
+                            quotationVO['exteriorColorDescription'] = option.description;
+                            break;
+                        case 'Interior Color':
+                            quotationVO['interiorColorCode'] = option.code;
+                            quotationVO['interiorColorDescription'] = option.description;
+                            break;
+                        default:
+                            condition['type'] = feature.category; // or etc에 대한 상세 category 필요 가능성 존재
+                            condition['description'] = option.description;
+                            condition['amount'] = option.listPrice;
+                            conditions.push(condition);
+                            break;
+                      };
+                    // case Exterior Color Code
+                    // case Interior Color Code
+                    // case Options
+                    // case Etc
+                    // ...
+
+                    // 할인 등 적용 내역 일괄 적용 하는 부분 -> 따로 메서드로 구현하여 뺀 상태로, 다른곳에서도 해당 메서드로 호출 -> 초기일 경우와 config에서넘어온 경우분리하여 파악
+                    // 가격 계산 시 quantity 등에 관한 고려도 필요
+
+                    // true가 아닐 경우 추가되지 않음
+                    isQuotationVO = true;
+                }
+            });
+            quotationVOList.push(quotationVO);
+        });
+    });
+
+    return quotationVOList;
+}
 
 
 // Grouping Prototypes
@@ -304,6 +355,7 @@ generateVehicleGroup = (bundles = []) => {
 // }
 
 
+
 // playthings
 
 // a = {'test': 1, 'test2':3};
@@ -334,56 +386,7 @@ const testFormattedTrims = () => {
     // console.log(returnValue);
 }
 
-// 각 index가 정의되어 있으므로 interior color에 해당
-
-const generateQuotationVO = (param = []) => {
-    let quotationVOList = [];
-
-    param.forEach(trim => {
-        let quotationVO = { 'fsc' : trim.fscCode, 'modelYear': trim.modelYear, 'description' : trim.description };
-
-        trim.features.forEach(feature => {
-            feature.options.forEach(option => {
-                let conditions = [];
-                if(option.checked === true) {
-                    let condition = {};
-                    // Switch-Case with LABEL
-                    switch (feature.category) {
-                        case 'Exterior Color':      // PickList의 API로 참조
-                            quotationVO['exteriorColorCode'] = option.code;
-                            quotationVO['exteriorColorDescription'] = option.description;
-                            break;
-                        case 'Interior Color':
-                            quotationVO['interiorColorCode'] = option.code;
-                            quotationVO['interiorColorDescription'] = option.description;
-                            break;
-                        default:
-                            condition['type'] = feature.category; // or etc에 대한 상세 category 필요 가능성 존재
-                            condition['description'] = option.description;
-                            condition['amount'] = option.listPrice;
-                            conditions.push(condition);
-                            break;
-                      };
-                    // case Exterior Color Code
-                    // case Interior Color Code
-                    // case Options
-                    // case Etc
-                    // ...
-
-                    // 할인 등 적용 내역 일괄 적용 하는 부분 -> 따로 메서드로 구현하여 뺀 상태로, 다른곳에서도 해당 메서드로 호출 -> 초기일 경우와 config에서넘어온 경우분리하여 파악
-                    // 가격 계산 시 quantity 등에 관한 고려도 필요
-
-                    // true가 아닐 경우 추가되지 않음
-                    quotationVOList.push(quotationVO);
-                }
-            });
-        });
-    });
-
-    return quotationVOList;
-}
-
-testFormattedTrims();
+// testFormattedTrims();
 
 
 const testGenerate = () => {
