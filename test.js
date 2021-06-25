@@ -187,273 +187,273 @@ const setGroup = function( bundleVOs ){
 
 console.log(setGroup(quoteBundles));
 
-fn_generateBundleGroup = (bundles = []) => {
+// fn_generateBundleGroup = (bundles = []) => {
 
-    let groupItems = [];    // UI 표기를 위한 grouping 목록 > component.get(v.groupItems) ???
-    bundles.forEach(bundle => {
-        console.log(bundle);
-        /*===============================================
-         * 동일 차량스펙 Group 처리
-         ===============================================*/
-        // 동일 Spec 의 차량 group key 생성
-        let groupKey = bundle.fsc + bundle.modelYear + bundle.exteriorColorCode + bundle.interiorColorCode;
+//     let groupItems = [];    // UI 표기를 위한 grouping 목록 > component.get(v.groupItems) ???
+//     bundles.forEach(bundle => {
+//         console.log(bundle);
+//         /*===============================================
+//          * 동일 차량스펙 Group 처리
+//          ===============================================*/
+//         // 동일 Spec 의 차량 group key 생성
+//         let groupKey = bundle.fsc + bundle.modelYear + bundle.exteriorColorCode + bundle.interiorColorCode;
 
-        // 전체 Group 목록에서 동일한 key 를 가진 index 확인
-        let groupIndex = groupItems.map(groupItem => {
-            return groupItem.groupKey;
-        }).indexOf(groupKey);
-        // index 존재하지 않는경우, Group 생성
-        if (groupIndex === -1) {
-            let group = {
-                groupKey: groupKey,
-                fsc: bundle.fsc,
-                description: bundle.description,
-                modelYear: bundle.modelYear,
-                optionDesc: bundle.exteriorColorDescription + '/' + bundle.interiorColorDescription,
-                // ** 추가로 필요한 속성 정의 **
-                quoteBundles: [bundle],
+//         // 전체 Group 목록에서 동일한 key 를 가진 index 확인
+//         let groupIndex = groupItems.map(groupItem => {
+//             return groupItem.groupKey;
+//         }).indexOf(groupKey);
+//         // index 존재하지 않는경우, Group 생성
+//         if (groupIndex === -1) {
+//             let group = {
+//                 groupKey: groupKey,
+//                 fsc: bundle.fsc,
+//                 description: bundle.description,
+//                 modelYear: bundle.modelYear,
+//                 optionDesc: bundle.exteriorColorDescription + '/' + bundle.interiorColorDescription,
+//                 // ** 추가로 필요한 속성 정의 **
+//                 quoteBundles: [bundle],
 
-                quantity: 1,
-                netPrice: 0
-                // ,netPrice: fn_apply(bundle)...
-            }
+//                 quantity: 1,
+//                 netPrice: 0
+//                 // ,netPrice: fn_apply(bundle)...
+//             }
 
-            // let conditionFlag = '';
-            // let iterationFlag = 0;
-            // if(!$A.util.isEmpty(bundle.conditions)) {
-            //     bundle.conditions.forEach(condition => {
-            //         let tempFlag = condition.type + condition.description + condition.amount;
-            //         conditionFlag.includes(tempFlag) ? (conditionFlag = tempFlag + ':' + iterationFlag++ + ';') :
-            //             (conditionFlag = conditionFlag + tempFlag + ':' + iterationFlag + ';');
-            //     });
-            // }
-            // let groupKeyFinal = ($A.util.isEmpty(conditionFlag)) ? groupKey : groupKey + conditionFlag;
-            // console.log(groupKeyFinal);
+//             // let conditionFlag = '';
+//             // let iterationFlag = 0;
+//             // if(!$A.util.isEmpty(bundle.conditions)) {
+//             //     bundle.conditions.forEach(condition => {
+//             //         let tempFlag = condition.type + condition.description + condition.amount;
+//             //         conditionFlag.includes(tempFlag) ? (conditionFlag = tempFlag + ':' + iterationFlag++ + ';') :
+//             //             (conditionFlag = conditionFlag + tempFlag + ':' + iterationFlag + ';');
+//             //     });
+//             // }
+//             // let groupKeyFinal = ($A.util.isEmpty(conditionFlag)) ? groupKey : groupKey + conditionFlag;
+//             // console.log(groupKeyFinal);
 
 
-            groupItems.push(group);
-        }
+//             groupItems.push(group);
+//         }
 
-        /*===============================================
-         * 동일 차량스펙, 동일 Condition(ETC) Amount까지 모두 같은 Bundle Group 처리
-         ===============================================*/
+//         /*===============================================
+//          * 동일 차량스펙, 동일 Condition(ETC) Amount까지 모두 같은 Bundle Group 처리
+//          ===============================================*/
 
-        // // Condition Key 생성 (Condition 목록 추출, 정렬하여 조합)
-        // let conditionWeakMap = new WeakMap();
-        // conditionWeakMap.set()
-        // Array도 
+//         // // Condition Key 생성 (Condition 목록 추출, 정렬하여 조합)
+//         // let conditionWeakMap = new WeakMap();
+//         // conditionWeakMap.set()
+//         // Array도 
 
-        // const conditionKey = bundle.conditions.map(condition => {
-        //     return condition.type + condition.description + condition.amount;
-        // }).sort().reduce((concatValue, value) => {
-        //     return concatValue + value;
-        // }, '');
+//         // const conditionKey = bundle.conditions.map(condition => {
+//         //     return condition.type + condition.description + condition.amount;
+//         // }).sort().reduce((concatValue, value) => {
+//         //     return concatValue + value;
+//         // }, '');
         
-        // Group 목록에서 동일한 Condition Key 로 구성된 차량 묶음 index 확인
-        groupIndex = groupIndex !== -1 ? groupIndex : groupItems.length - 1;
+//         // Group 목록에서 동일한 Condition Key 로 구성된 차량 묶음 index 확인
+//         groupIndex = groupIndex !== -1 ? groupIndex : groupItems.length - 1;
 
-        const conditionWeakMap = new WeakMap();
-        conditionWeakMap.set(Object.assign({}, bundle.conditions));
+//         const conditionWeakMap = new WeakMap();
+//         conditionWeakMap.set(Object.assign({}, bundle.conditions));
 
-        const vehicleIndex = groupItems[groupIndex].vehicleItems.map(vehicleItem => {
-            return vehicleItem.conditionKey;
-        }).indexOf(conditionKey);
-        // index 존재하지 않는 경우 Vehicle 묶음 생성
-        if (vehicleIndex === -1) {
-            let vehicleItem = {
-                conditionKey: conditionKey,
-                // ** 추가로 필요한 속성 정의 **
-                quantity: 1,
-                conditions: bundle.conditions
-            };
-            groupItems[groupIndex].vehicleItems.push(vehicleItem);
-        }
-        // index 존재하는 경우 차량 수량 추가
+//         const vehicleIndex = groupItems[groupIndex].vehicleItems.map(vehicleItem => {
+//             return vehicleItem.conditionKey;
+//         }).indexOf(conditionKey);
+//         // index 존재하지 않는 경우 Vehicle 묶음 생성
+//         if (vehicleIndex === -1) {
+//             let vehicleItem = {
+//                 conditionKey: conditionKey,
+//                 // ** 추가로 필요한 속성 정의 **
+//                 quantity: 1,
+//                 conditions: bundle.conditions
+//             };
+//             groupItems[groupIndex].vehicleItems.push(vehicleItem);
+//         }
+//         // index 존재하는 경우 차량 수량 추가
 
-        else {
-            groupItems[groupIndex].quoteBundles.push(bundle);
-            groupItems[groupIndex].quantity = groupItems[groupIndex].quoteBundles.length;
-            groupItems[groupIndex].netPrice = groupItems[groupIndex].netPrice * groupItems[groupIndex].quoteBundles.length;
-        }
-    });
+//         else {
+//             groupItems[groupIndex].quoteBundles.push(bundle);
+//             groupItems[groupIndex].quantity = groupItems[groupIndex].quoteBundles.length;
+//             groupItems[groupIndex].netPrice = groupItems[groupIndex].netPrice * groupItems[groupIndex].quoteBundles.length;
+//         }
+//     });
 
-    console.log(groupItems);
-    return groupItems;
-}
+//     console.log(groupItems);
+//     return groupItems;
+// }
 
 // console.log(fn_generateBundleGroup(quoteBundles));
 
 
-generateVehicleGroup = (bundles = []) => {
-    let groupItems = [];    // UI 표기를 위한 grouping 목록 > component.get(v.groupItems) ???
-    bundles.forEach(bundle => {
-        console.log(bundle);
-        /*===============================================
-         * 동일 차량스펙 Group 처리
-         ===============================================*/
-        // 동일 Spec 의 차량 group key 생성
-        let groupKey = bundle.fsc + bundle.modelYear + bundle.exteriorColorCode + bundle.interiorColorCode;
-        let conditionFlag = '';
-        let iterationFlag = 0;
-        if(!$A.util.isEmpty(bundle.conditions)) {
-            bundle.conditions.forEach(condition => {
-                let tempFlag = condition.type + condition.description + condition.amount;
-                conditionFlag.includes(tempFlag) ? (conditionFlag = tempFlag + ':' + iterationFlag++ + ';') :
-                    (conditionFlag = conditionFlag + tempFlag + ':' + iterationFlag + ';');
-            });
-        }
-        let groupKeyFinal = ($A.util.isEmpty(conditionFlag)) ? groupKey : groupKey + conditionFlag;
-        console.log(groupKeyFinal);
+// generateVehicleGroup = (bundles = []) => {
+//     let groupItems = [];    // UI 표기를 위한 grouping 목록 > component.get(v.groupItems) ???
+//     bundles.forEach(bundle => {
+//         console.log(bundle);
+//         /*===============================================
+//          * 동일 차량스펙 Group 처리
+//          ===============================================*/
+//         // 동일 Spec 의 차량 group key 생성
+//         let groupKey = bundle.fsc + bundle.modelYear + bundle.exteriorColorCode + bundle.interiorColorCode;
+//         let conditionFlag = '';
+//         let iterationFlag = 0;
+//         if(!$A.util.isEmpty(bundle.conditions)) {
+//             bundle.conditions.forEach(condition => {
+//                 let tempFlag = condition.type + condition.description + condition.amount;
+//                 conditionFlag.includes(tempFlag) ? (conditionFlag = tempFlag + ':' + iterationFlag++ + ';') :
+//                     (conditionFlag = conditionFlag + tempFlag + ':' + iterationFlag + ';');
+//             });
+//         }
+//         let groupKeyFinal = ($A.util.isEmpty(conditionFlag)) ? groupKey : groupKey + conditionFlag;
+//         console.log(groupKeyFinal);
 
-        // 전체 Group 목록에서 동일한 key 를 가진 index 확인
-        let groupIndex = groupItems.map(groupItem => {
-            return groupItem.groupKey;
-        }).indexOf(groupKeyFinal);
-        // index 존재하지 않는경우, Group 생성
-        if (groupIndex === -1) {
-            let group = {
-                groupKey: groupKeyFinal,
-                fsc: bundle.fsc,
-                description: bundle.description,
-                modelYear: bundle.modelYear,
-                optionDesc: bundle.exteriorColorDescription + '/' + bundle.interiorColorDescription,
-                // ** 추가로 필요한 속성 정의 **
-                // quoteBundles: [bundle],
+//         // 전체 Group 목록에서 동일한 key 를 가진 index 확인
+//         let groupIndex = groupItems.map(groupItem => {
+//             return groupItem.groupKey;
+//         }).indexOf(groupKeyFinal);
+//         // index 존재하지 않는경우, Group 생성
+//         if (groupIndex === -1) {
+//             let group = {
+//                 groupKey: groupKeyFinal,
+//                 fsc: bundle.fsc,
+//                 description: bundle.description,
+//                 modelYear: bundle.modelYear,
+//                 optionDesc: bundle.exteriorColorDescription + '/' + bundle.interiorColorDescription,
+//                 // ** 추가로 필요한 속성 정의 **
+//                 // quoteBundles: [bundle],
 
-                quantity: 1,
-                netPrice: 0
-                // ,netPrice: fn_apply(bundle)...
-            }
-//                 'fscCode' => new Map<String, String> {'label' => 'FSC', 'dataType' => 'String'},
-//                 'description' => new Map<String, String> {'label' => 'Product Name', 'dataType' => 'String'},
-//                 'optionDesc' => new Map<String, String> {'label' => 'Exterior/Interior Color', 'dataType' => 'String'},
-// //                        'interiorColorCode' => new Map<String, String> {'label' => 'Interior Color', 'dataType' => 'String'},
-//                 'quantity' => new Map<String, String> {'label' => 'Quantity', 'dataType' => 'Number'},
-// //                        'listPrice' => new Map<String, String> {'label' => 'List Price', 'dataType' => 'Currency'},
-// //                        'discountAmt' => new Map<String, String> {'label' => 'Discount/Impose', 'dataType' => 'Currency'},
-//                 'netPrice' => new Map<String, String> {'label' => 'Net Price', 'dataType' => 'Currency'}
-            groupItems.push(group);
-        }
+//                 quantity: 1,
+//                 netPrice: 0
+//                 // ,netPrice: fn_apply(bundle)...
+//             }
+// //                 'fscCode' => new Map<String, String> {'label' => 'FSC', 'dataType' => 'String'},
+// //                 'description' => new Map<String, String> {'label' => 'Product Name', 'dataType' => 'String'},
+// //                 'optionDesc' => new Map<String, String> {'label' => 'Exterior/Interior Color', 'dataType' => 'String'},
+// // //                        'interiorColorCode' => new Map<String, String> {'label' => 'Interior Color', 'dataType' => 'String'},
+// //                 'quantity' => new Map<String, String> {'label' => 'Quantity', 'dataType' => 'Number'},
+// // //                        'listPrice' => new Map<String, String> {'label' => 'List Price', 'dataType' => 'Currency'},
+// // //                        'discountAmt' => new Map<String, String> {'label' => 'Discount/Impose', 'dataType' => 'Currency'},
+// //                 'netPrice' => new Map<String, String> {'label' => 'Net Price', 'dataType' => 'Currency'}
+//             groupItems.push(group);
+//         }
 
-        // /*===============================================
-        //  * 동일 차량스펙, 동일 Condition(ETC) Amount까지 모두 같은 Bundle Group 처리
-        //  ===============================================*/
-        // // Condition Key 생성 (Condition 목록 추출, 정렬하여 조합)
-        // const conditionKey = bundle.conditions.map(condition => {
-        //     return condition.type + condition.description + condition.amount;
-        // }).sort().reduce((concatValue, value) => {
-        //     return concatValue + value;
-        // }, '');
-        //
-        // // Group 목록에서 동일한 Condition Key 로 구성된 차량 묶음 index 확인
-        // groupIndex = groupIndex !== -1 ? groupIndex : groupItems.length - 1;
-        // const vehicleIndex = groupItems[groupIndex].vehicleItems.map(vehicleItem => {
-        //     return vehicleItem.conditionKey;
-        // }).indexOf(conditionKey);
-        // // index 존재하지 않는 경우 Vehicle 묶음 생성
-        // if (vehicleIndex === -1) {
-        //     let vehicleItem = {
-        //         conditionKey: conditionKey,
-        //         // ** 추가로 필요한 속성 정의 **
-        //         quantity: 1,
-        //         conditions: bundle.conditions
-        //     };
-        //     groupItems[groupIndex].vehicleItems.push(vehicleItem);
-        // }
-        // // index 존재하는 경우 차량 수량 추가
+//         // /*===============================================
+//         //  * 동일 차량스펙, 동일 Condition(ETC) Amount까지 모두 같은 Bundle Group 처리
+//         //  ===============================================*/
+//         // // Condition Key 생성 (Condition 목록 추출, 정렬하여 조합)
+//         // const conditionKey = bundle.conditions.map(condition => {
+//         //     return condition.type + condition.description + condition.amount;
+//         // }).sort().reduce((concatValue, value) => {
+//         //     return concatValue + value;
+//         // }, '');
+//         //
+//         // // Group 목록에서 동일한 Condition Key 로 구성된 차량 묶음 index 확인
+//         // groupIndex = groupIndex !== -1 ? groupIndex : groupItems.length - 1;
+//         // const vehicleIndex = groupItems[groupIndex].vehicleItems.map(vehicleItem => {
+//         //     return vehicleItem.conditionKey;
+//         // }).indexOf(conditionKey);
+//         // // index 존재하지 않는 경우 Vehicle 묶음 생성
+//         // if (vehicleIndex === -1) {
+//         //     let vehicleItem = {
+//         //         conditionKey: conditionKey,
+//         //         // ** 추가로 필요한 속성 정의 **
+//         //         quantity: 1,
+//         //         conditions: bundle.conditions
+//         //     };
+//         //     groupItems[groupIndex].vehicleItems.push(vehicleItem);
+//         // }
+//         // // index 존재하는 경우 차량 수량 추가
 
-        else {
-            groupItems[groupIndex].quoteBundles.push(bundle);
-            groupItems[groupIndex].quantity = groupItems[groupIndex].quoteBundles.length;
-            groupItems[groupIndex].netPrice = groupItems[groupIndex].netPrice * groupItems[groupIndex].quoteBundles.length;
-        }
-    });
+//         else {
+//             groupItems[groupIndex].quoteBundles.push(bundle);
+//             groupItems[groupIndex].quantity = groupItems[groupIndex].quoteBundles.length;
+//             groupItems[groupIndex].netPrice = groupItems[groupIndex].netPrice * groupItems[groupIndex].quoteBundles.length;
+//         }
+//     });
 
-    console.log(groupItems);
-    return groupItems;
-}
+//     console.log(groupItems);
+//     return groupItems;
+// }
 
-function generateVehicleGroup(param = []){
-    /*===============================================
-    [전체 차량 목록]
-     : component 에서 가지고있는 전체 차량 목록. Apex 조회 또는 UI 추가한 차량
-    vehicleSpec = {
-        fsc : ... ,
-        modelyear : ... ,
-        extColor : ... ,
-        intColor : ... ,
-        description : ...,
-        extColorDescription : ... ,
-        intColorDescription : ... ,
-        conditions : [
-            {
-                type : ... ,
-                description : ... ,
-                amount : ...
-            },
-            {}, {} , ...
-        ]
-    }
-     ===============================================*/
-    // let vehicleSpecs = [];
+// function generateVehicleGroup(param = []){
+//     /*===============================================
+//     [전체 차량 목록]
+//      : component 에서 가지고있는 전체 차량 목록. Apex 조회 또는 UI 추가한 차량
+//     vehicleSpec = {
+//         fsc : ... ,
+//         modelyear : ... ,
+//         extColor : ... ,
+//         intColor : ... ,
+//         description : ...,
+//         extColorDescription : ... ,
+//         intColorDescription : ... ,
+//         conditions : [
+//             {
+//                 type : ... ,
+//                 description : ... ,
+//                 amount : ...
+//             },
+//             {}, {} , ...
+//         ]
+//     }
+//      ===============================================*/
+//     // let vehicleSpecs = [];
 
-    let groupItems;    // UI 표기를 위한 grouping 목록 > component.get(v.groupItems) ???
-     param.forEach( vehicleSpec => {
-        /*===============================================
-         * 동일 차량스펙 Group 처리
-         ===============================================*/
-        // 동일 Spec 의 차량 group key 생성
-        let groupKey = vehicleSpec.fsc + vehicleSpec.modelYear + vehicleSpec.extColor + vehicleSpec.intColor;
-        // 전체 Group 목록에서 동일한 key 를 가진 index 확인
-        let groupIndex = groupItems.map( groupItem => {
-            return groupItem.groupKey;
-        }).indexOf( groupkey );
-        // index 존재하지 않는경우, Group 생성
-        if( groupIndex === -1 ){
-            let group = {
-                groupKey        : groupKey,
-                fsc             : vehicleSpec.fsc,
-                modelYear       : vehicleSpec.modelYear,
-                extColor        : vehicleSpec.extColor,
-                intColor        : vehicleSpec.intColor,
-                // ** 추가로 필요한 속성 정의 **
-                vehicleItems    : [],
-                quantity        : 0
-            }
-            groupItems.push(group);    
-        }
-        /*===============================================
-         * 동일 차량스펙, 동일 가격 Group 처리
-         ===============================================*/
-        // Condition Key 생성 (Condition 목록 추출, 정렬하여 조합)
-        const conditionKey = vehicleSpec.conditions.map( condition => {
-            return condition.type + condition.description + condition.amount;
-        }).sort().reduce((concatValue, value) => {
-            return concatValue + value;
-        },'');
-        // Group 목록에서 동일한 Condition Key 로 구성된 차량 묶음 index 확인
-        groupIndex = groupIndex !== -1 ? groupIndex : groupItems.length -1;
-        const vehicleIndex = groupItems[groupIndex].vehicleItems.map( vehicleItem => {
-            return vehicleItem.conditionKey;
-        }).indexOf( conditionKey );
-        // index 존재하지 않는 경우 Vehicle 묶음 생성
-        if( vehicleIndex === -1 ){
-            let vehicleItem = {
-                conditionKey        : conditionKey,
-                // ** 추가로 필요한 속성 정의 **
-                quantity            : 1,
-                conditions          : vehicleSpec.conditions
-            };
-            groupItems[groupIndex].vehicleItems.push(vehicleItem);
-        }
-        // index 존재하는 경우 차량 수량 추가
-        else{
-            gruopItems[groupIndex].vehicleItem[vehicleIndex].quantity = gruopItems[groupIndex].vehicleItem[vehicleIndex].quantity + 1;
-        }
-    });
-    // UI 출력을 위한 Attribute 설정
-    component.set('v.groupItems',groupItems);
-}
+//     let groupItems;    // UI 표기를 위한 grouping 목록 > component.get(v.groupItems) ???
+//      param.forEach( vehicleSpec => {
+//         /*===============================================
+//          * 동일 차량스펙 Group 처리
+//          ===============================================*/
+//         // 동일 Spec 의 차량 group key 생성
+//         let groupKey = vehicleSpec.fsc + vehicleSpec.modelYear + vehicleSpec.extColor + vehicleSpec.intColor;
+//         // 전체 Group 목록에서 동일한 key 를 가진 index 확인
+//         let groupIndex = groupItems.map( groupItem => {
+//             return groupItem.groupKey;
+//         }).indexOf( groupkey );
+//         // index 존재하지 않는경우, Group 생성
+//         if( groupIndex === -1 ){
+//             let group = {
+//                 groupKey        : groupKey,
+//                 fsc             : vehicleSpec.fsc,
+//                 modelYear       : vehicleSpec.modelYear,
+//                 extColor        : vehicleSpec.extColor,
+//                 intColor        : vehicleSpec.intColor,
+//                 // ** 추가로 필요한 속성 정의 **
+//                 vehicleItems    : [],
+//                 quantity        : 0
+//             }
+//             groupItems.push(group);    
+//         }
+//         /*===============================================
+//          * 동일 차량스펙, 동일 가격 Group 처리
+//          ===============================================*/
+//         // Condition Key 생성 (Condition 목록 추출, 정렬하여 조합)
+//         const conditionKey = vehicleSpec.conditions.map( condition => {
+//             return condition.type + condition.description + condition.amount;
+//         }).sort().reduce((concatValue, value) => {
+//             return concatValue + value;
+//         },'');
+//         // Group 목록에서 동일한 Condition Key 로 구성된 차량 묶음 index 확인
+//         groupIndex = groupIndex !== -1 ? groupIndex : groupItems.length -1;
+//         const vehicleIndex = groupItems[groupIndex].vehicleItems.map( vehicleItem => {
+//             return vehicleItem.conditionKey;
+//         }).indexOf( conditionKey );
+//         // index 존재하지 않는 경우 Vehicle 묶음 생성
+//         if( vehicleIndex === -1 ){
+//             let vehicleItem = {
+//                 conditionKey        : conditionKey,
+//                 // ** 추가로 필요한 속성 정의 **
+//                 quantity            : 1,
+//                 conditions          : vehicleSpec.conditions
+//             };
+//             groupItems[groupIndex].vehicleItems.push(vehicleItem);
+//         }
+//         // index 존재하는 경우 차량 수량 추가
+//         else{
+//             gruopItems[groupIndex].vehicleItem[vehicleIndex].quantity = gruopItems[groupIndex].vehicleItem[vehicleIndex].quantity + 1;
+//         }
+//     });
+//     // UI 출력을 위한 Attribute 설정
+//     component.set('v.groupItems',groupItems);
+// }
 
 
 // function generateVehicleGroup(){
