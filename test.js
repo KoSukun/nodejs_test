@@ -185,7 +185,7 @@ const setGroup = function( bundleVOs ){
     return voGroups;
 }
 
-console.log(setGroup(quoteBundles));
+// console.log(setGroup(quoteBundles));
 
 // fn_generateBundleGroup = (bundles = []) => {
 
@@ -622,9 +622,106 @@ const constrainGenerate = (param = []) => {
     return returnGeneratedArray;
 }
 
-const calculateAmountWithConditions = (param = []) => {
+const calculateNetPriceWithConditions = (trims = [], quoteBundles = []) => {
+    const trim = {
+        a:null,
+        b:null,
+        features: [
+            {   d:null,
+                e:null,
+                options:[
+                    {
+                        g:null,
+                        h:null,
+                        listPrice:100
+                    },
+                    {
+                        g:null,
+                        h:null,
+                        listPrice:100
+                    },
+                    {
+                        g:null,
+                        h:null,
+                        listPrice:200
+                    }
+                ]
+            },
+            {   d:null,
+                e:null,
+                options:[
+                    {
+                        g:null,
+                        h:null,
+                        listPrice:100
+                    },
+                    {
+                        g:null,
+                        h:null,
+                        listPrice:100
+                    },
+                    {
+                        g:null,
+                        h:null,
+                        listPrice:200
+                    }
+                ]
+            },
+            {   d:null,
+                e:null,
+                options:[
+                    {
+                        g:null,
+                        h:null,
+                        listPrice:100
+                    },
+                    {
+                        g:null,
+                        h:null,
+                        listPrice:100
+                    },
+                    {
+                        g:null,
+                        h:null,
+                        listPrice:200
+                    }
+                ]
+            },
+        ],
+        listPrice:10000
+    }
 
+    let trimListPrice = trim.listPrice;
+    
+    const optionsNetPrice = trim.features.reduce((accumulator, vo) => {
+        // accumulator = vo.options;
+        return vo.options;
+    },[]).reduce(function (acc, accumulator) { return acc + accumulator.listPrice; }, 0);
+
+    //     arr.reduce(function (a, b) {
+    //         return {x: a.x + b.x}; // returns object with property x
+    //       })
+
+    //     console.log(option);
+    //     accumulator += option.listPrice;
+    // });
+    totalPrice = trimListPrice + optionsNetPrice;
+
+    console.log(totalPrice);
+
+    // listPrice = trim.listPrice;
+    // console.log('test>> ' ,trim.features);
+    // let features = trim.features.flat(14);
+    // console.log('flat test >> ', features);
+
+
+    // console.log(result);
+    const sumValues = listPrice => Object.values(listPrice).reduce((a, b) => a + b);
 }
+
+// const calculateNetPriceWithConditions = (trims = [], quoteBundles = [])
+
+calculateNetPriceWithConditions();
 
 // testGenerate();
 
