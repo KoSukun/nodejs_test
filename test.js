@@ -692,11 +692,13 @@ const calculateNetPriceWithConditions = (trims = [], quoteBundles = []) => {
     }
 
     let trimListPrice = trim.listPrice;
-    
+    let optionsAll = [];
     const optionsNetPrice = trim.features.reduce((accumulator, vo) => {
-        // accumulator = vo.options;
-        return vo.options;
-    },[]).reduce(function (acc, accumulator) { return acc + accumulator.listPrice; }, 0);
+        optionsAll = [...optionsAll, vo.options];
+        return optionsAll;
+    },[]).flat().reduce(function (acc, optionsArray) { 
+        console.log(optionsArray);
+        return acc + optionsArray.listPrice; }, 0);
 
     //     arr.reduce(function (a, b) {
     //         return {x: a.x + b.x}; // returns object with property x
